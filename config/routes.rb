@@ -5,14 +5,22 @@ Rails.application.routes.draw do
   post 'login', to: 'sessions#create'
   delete 'logout', to: 'sessions#destroy'
 
+  #ユーザーの新規URLを/signupにする
   get 'signup', to: 'users#new'
   resources :users, only: [:index, :show, :create] do
     member do
       get :followings
       get :followers
-    end
+      get :likes
+    end    
   end
-  # resources :users, only: [:index, :show, :create]
-  resources :microposts, only: [:create, :destroy]
+  
+  #必要なアクションのみ指定。createで投稿、destroyで投稿を削除
+  resources :microposts, only: [:create, :destroy] 
+  # ログインユーザーがフォロー、フォロー解除できるようにするルーティング
   resources :relationships, only: [:create, :destroy]
+  
+  # ログインユーザがお気に入りを登録、登録削除できるようにするルーティング
+  resources :favorites, only: [:create, :destroy]
+
 end

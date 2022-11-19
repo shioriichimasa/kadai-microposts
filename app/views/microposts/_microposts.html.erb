@@ -14,6 +14,9 @@
             <% if current_user == micropost.user %>
               <%= link_to "Delete", micropost, method: :delete, data: { confirm: "You sure?" }, class: 'btn btn-danger btn-sm' %>
             <% end %>
+            <!--お気に入りのボタン追加-->
+            <%= render 'favorites/like_button', micropost: micropost %>
+            
           </div>
         </div>
       </li>

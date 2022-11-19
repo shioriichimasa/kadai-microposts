@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
-  before_action :require_user_logged_in, only: [:index, :show, :followings, :followers]
+  # ログイン必須にするアクションを設定
+  before_action :require_user_logged_in, only: [:index, :show, :followings, :followers, :likes]
 
+  # 一覧の表示。page~~はページネーション
   def index
     @pagy, @users = pagy(User.order(id: :desc), items: 25)
   end
@@ -27,6 +29,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # フォロー／フォロワー一覧表示
   def followings
     @user = User.find(params[:id])
     @pagy, @followings = pagy(@user.followings)
@@ -36,6 +39,14 @@ class UsersController < ApplicationController
   def followers
     @user = User.find(params[:id])
     @pagy, @followers = pagy(@user.followers)
+    counts(@user)
+  end
+  
+  def likes
+    # idでユーザーを指定
+    @user = User.find(params[:id])
+    # 上で指定したuser_idが持つlikesを指定
+    @pagy, @likes = pagy(@user.likes)
     counts(@user)
   end
 
